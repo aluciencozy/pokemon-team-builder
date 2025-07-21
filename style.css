@@ -328,8 +328,8 @@ dialog {
   margin: auto;
   width: 90vw;
   height: 90vh;
-  max-width: 800px;
-  max-height: 800px;
+  max-width: 650px;
+  max-height: 650px;
   overflow-y: auto;
   background-color: var(--clr-bg);
   color: var(--clr-slate100);
@@ -337,10 +337,33 @@ dialog {
   padding: 2rem;
   box-shadow: var(--shadow);
   border-radius: 10px;
+  opacity: 0;
+  transition: all 0.3s allow-discrete;
+}
+
+dialog[open] {
+  opacity: 1;
+}
+
+@starting-style {
+  dialog[open] {
+    opacity: 0;
+  }
 }
 
 dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0);
+  transition: all 0.3s allow-discrete;
+}
+
+dialog[open]::backdrop {
   background-color: rgba(0, 0, 0, 0.8);
+}
+
+@starting-style {
+  dialog[open]::backdrop {
+    background-color: rgba(0, 0, 0, 0);
+  }
 }
 
 .modal-pokemon-display {
@@ -488,6 +511,7 @@ dialog::backdrop {
   .modal-types {
     display: grid;
     gap: 1rem;
+    justify-items: center;
   }
 }
 
