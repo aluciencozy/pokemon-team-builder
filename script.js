@@ -294,7 +294,9 @@ function calculateTypeEffectiveness(effectivenessData) {
     else resistances.push(typeName);
   }
 
-  weaknesses.forEach((type) => {
+  const weaknessesCopy = [...weaknesses];
+
+  weaknessesCopy.forEach((type) => {
     // if the type is both a weakness and resistance
     if (resistances.includes(type)) {
       let index = weaknesses.indexOf(type);
