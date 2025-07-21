@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokémon Team Builder</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <dialog id="modal">
+      <div class="modal-pokemon-display">
+        <h5 class="modal-id"></h5>
+        <h2 class="modal-pokemon-name"></h2>
+        <img class="modal-sprite" src="" alt="" />
+        <!-- todo: add shiny btn -->
+      </div>
+
+      <div class="modal-type-container modal-container">
+        <h2>Typing</h2>
+        <div class="modal-types"></div>
+      </div>
+
+      <div class="modal-abilities-container modal-container">
+        <h2>Abilities</h2>
+        <div class="abilities"></div>
+      </div>
+
+      <div class="modal-stats-container modal-container">
+        <h2>Game Stats</h2>
+        <ul class="modal-stats">
+          <li class="modal-stat">
+            <div class="stat-text">
+              <span>HP</span><span class="modal-hp"></span>
+            </div>
+            <div class="stat-bar-unfilled">
+              <div class="stat-bar-filled hp-bar"></div>
+            </div>
+          </li>
+          <li class="modal-stat">
+            <div class="stat-text">
+              <span>Atk</span><span class="modal-atk"></span>
+            </div>
+            <div class="stat-bar-unfilled">
+              <div class="stat-bar-filled atk-bar"></div>
+            </div>
+          </li>
+          <li class="modal-stat">
+            <div class="stat-text">
+              <span>Def</span><span class="modal-def"></span>
+            </div>
+            <div class="stat-bar-unfilled">
+              <div class="stat-bar-filled def-bar"></div>
+            </div>
+          </li>
+          <li class="modal-stat">
+            <div class="stat-text">
+              <span>SpA</span><span class="modal-spAtk"></span>
+            </div>
+            <div class="stat-bar-unfilled">
+              <div class="stat-bar-filled spAtk-bar"></div>
+            </div>
+          </li>
+          <li class="modal-stat">
+            <div class="stat-text">
+              <span>SpD</span><span class="modal-spDef"></span>
+            </div>
+            <div class="stat-bar-unfilled">
+              <div class="stat-bar-filled spDef-bar"></div>
+            </div>
+          </li>
+          <li class="modal-stat">
+            <div class="stat-text">
+              <span>Spe</span><span class="modal-spd"></span>
+            </div>
+            <div class="stat-bar-unfilled">
+              <div class="stat-bar-filled spd-bar"></div>
+            </div>
+          </li>
+        </ul>
+        <h4 class="modal-stat-total"></h4>
+      </div>
+
+      <div class="modal-container">
+        <h2>Type Effectiveness</h2>
+        <div class="modal-type-effectiveness">
+          <div class="effectiveness hidden">
+            <h3 class="modal-type-effectiveness-title">
+              Very weak against (x4)
+            </h3>
+            <div class="super-weakness effectiveness-icons"></div>
+          </div>
+          <div class="effectiveness hidden">
+            <h3 class="modal-type-effectiveness-title">Weak against (x2)</h3>
+            <div class="weakness effectiveness-icons"></div>
+          </div>
+          <div class="effectiveness hidden">
+            <h3 class="modal-type-effectiveness-title">Resistant to (x0.5)</h3>
+            <div class="resistance effectiveness-icons"></div>
+          </div>
+          <div class="effectiveness hidden">
+            <h3 class="modal-type-effectiveness-title">
+              Very resistant to (x0.25)
+            </h3>
+            <div class="super-resistance effectiveness-icons"></div>
+          </div>
+          <div class="effectiveness hidden">
+            <h3 class="modal-type-effectiveness-title">Immune (x0)</h3>
+            <div class="immunities effectiveness-icons"></div>
+          </div>
+        </div>
+      </div>
+
+      <button id="remove-pokemon-btn">Remove</button>
+      <button id="close-modal-btn">Close</button>
+    </dialog>
+
+    <div class="container">
+      <h1>Pokémon Team Builder</h1>
+
+      <div class="team-info-container">
+        <h2 contenteditable="false" class="team-name"></h2>
+        <div class="team-sprites"></div>
+      </div>
+
+      <div class="search-container hidden">
+        <h2 class="search-pokemon">Search Pokémon</h2>
+        <form class="search-form">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search pokémon by name or number..."
+          />
+          <label for="search-input">
+            <button class="search-btn"><i class="fas fa-search"></i></button>
+          </label>
+        </form>
+      </div>
+
+      <div class="loading-container">Fetching pokemon...</div>
+
+      <div class="error-container"></div>
+
+      <div class="searched-pokemon-container hidden">
+        <div class="pokemon-info">
+          <h2 class="pokemon-name"></h2>
+          <div class="pokemon-display">
+            <img class="sprite" src="" alt="" />
+            <div class="type-container"></div>
+          </div>
+          <div class="stats-container">
+            <ul class="stats">
+              <li class="hp stat"></li>
+              <li class="atk stat"></li>
+              <li class="def stat"></li>
+              <li class="spAtk stat"></li>
+              <li class="spDef stat"></li>
+              <li class="spd stat"></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="add-to-party">
+          <button class="add-btn">Add to Team</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
