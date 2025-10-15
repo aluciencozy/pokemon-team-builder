@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from routers import teams
+from routers import teams, auth
 from database import create_db_and_tables
 
 
@@ -16,7 +16,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-# app.include_router(auth.router)
+app.include_router(auth.router)
 app.include_router(teams.router)
 
 

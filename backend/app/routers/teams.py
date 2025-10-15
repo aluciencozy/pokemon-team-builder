@@ -1,5 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import select
 
+from app.database import SessionDep
+from app.schemas import TeamCreate, TeamPublic, Team
 
 router = APIRouter(
     prefix="/teams",
@@ -8,8 +11,9 @@ router = APIRouter(
 )
 
 
-@router.get("/")
-async def get_teams():
+@router.get("/", response_model=list[TeamPublic])
+async def get_teams(session: SessionDep, team: TeamCreate):
+    # return session.exec(select(Team)).all
     pass
 
 

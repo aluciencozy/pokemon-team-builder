@@ -1,9 +1,20 @@
 from sqlmodel import Field, SQLModel, Relationship
+from pydantic import BaseModel
+
+
+# --- TOKEN MODELS ---
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str
 
 
 # --- USER MODELS ---
 class UserBase(SQLModel):
-    username: str
+    username: str = Field(unique=True)
 
 
 class User(UserBase, table=True):
