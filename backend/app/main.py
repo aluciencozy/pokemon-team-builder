@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
+from routers import teams
+from database import create_db_and_tables
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("Startup event: Application is starting...")
-    # create_db_and_tables()
+    create_db_and_tables()
     yield
     print("Shutdown event: Application is closing.")
 
@@ -13,9 +16,8 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-# Include routers for later
 # app.include_router(auth.router)
-# app.include_router(teams.router)
+app.include_router(teams.router)
 
 
 # Confirm the API is running
