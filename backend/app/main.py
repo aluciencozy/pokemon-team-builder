@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers import teams, auth
-from database import create_db_and_tables
+from app.routers import teams, auth
+from app.database import create_db_and_tables
 
 origins = [
     "http://localhost5173",

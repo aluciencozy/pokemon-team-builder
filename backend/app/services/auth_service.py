@@ -3,10 +3,10 @@ from datetime import datetime, timedelta, timezone
 import os
 import jwt
 from pwdlib import PasswordHash
+from sqlmodel import select
 
-from app.schemas import Token, User
+from app.schemas import User
 from app.database import SessionDep
-from app.dependencies import get_user
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
@@ -20,6 +20,10 @@ def get_password_hash(password: str) -> str:
 
 def verify_password(password: str, hashed_password: str) -> bool:
     return password_hash.verify(password, hashed_password)
+
+
+def get_user(session: SessionDep, username: str) -> User | None:
+    return session.exec(select(User).where(User.username == username)).first()
 
 
 def authenticate_user(session: SessionDep, username: str, password: str) -> User | None:

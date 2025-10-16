@@ -4,17 +4,12 @@ import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
-from sqlmodel import select
 
 from app.schemas import TokenData, User
 from app.database import SessionDep
-from app.services.auth_service import SECRET_KEY, ALGORITHM
+from app.services.auth_service import SECRET_KEY, ALGORITHM, get_user
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-
-def get_user(session: SessionDep, username: str) -> User | None:
-    return session.exec(select(User).where(User.username == username)).first()
 
 
 async def get_current_user(
