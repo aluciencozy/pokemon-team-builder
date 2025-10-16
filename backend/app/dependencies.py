@@ -1,13 +1,12 @@
 from typing import Annotated
 
 import jwt
-import os
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt.exceptions import InvalidTokenError
 from sqlmodel import select
 
-from app.schemas import TokenData, Token, User
+from app.schemas import TokenData, User
 from app.database import SessionDep
 from app.services.auth_service import SECRET_KEY, ALGORITHM
 

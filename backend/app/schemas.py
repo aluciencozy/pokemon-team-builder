@@ -1,5 +1,5 @@
 from sqlmodel import Field, SQLModel, Relationship
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 # --- TOKEN MODELS ---
@@ -14,7 +14,8 @@ class TokenData(BaseModel):
 
 # --- USER MODELS ---
 class UserBase(SQLModel):
-    username: str = Field(unique=True)
+    username: str = Field(unique=True, index=True)
+    email: EmailStr = Field(unique=True, index=True)
 
 
 class User(UserBase, table=True):

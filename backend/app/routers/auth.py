@@ -2,14 +2,11 @@ from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
-from pwdlib import PasswordHash
 
-from app.schemas import Token, User, UserPublic
+from app.schemas import Token, User, UserPublic, UserCreate
 from app.database import SessionDep
 from app.services import auth_service
 from app.dependencies import get_current_user
-
-password_hash = PasswordHash.recommended()
 
 router = APIRouter(
     prefix="/auth",
@@ -18,9 +15,28 @@ router = APIRouter(
 )
 
 
-@router.post("/register")
-async def register():
-    pass
+@router.post("/register", status_code=status.HTTP_201_CREATED)
+async def register(user_data: UserCreate, session: SessionDep) -> Token:
+    existing_user = auth_service.get_user(session, user_data.username)
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="User already exists",
+        )
+
+    hashed_password = auth_service.get_password_hash(user_data.password)
+    db_user = User(
+        username=user_data.username,
+        hashed_password=hashed_password,
+        email=user_data.email,
+    )
+
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
+
+    access_token = auth_service.create_access_token(data={"sub": user_data.username})
+    return Token(access_token=access_token, token_type="bearer")
 
 
 @router.post("/login")
@@ -36,6 +52,7 @@ async def login(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
     access_token = auth_service.create_access_token(data={"sub": user.username})
     return Token(access_token=access_token, token_type="bearer")
 
