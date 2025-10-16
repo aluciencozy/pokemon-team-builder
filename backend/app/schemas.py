@@ -58,14 +58,14 @@ class PokemonPublic(PokemonBase):
 
 # --- TEAM MODELS ---
 class TeamBase(SQLModel):
-    name: str
+    name: str = Field(index=True)
 
 
 class Team(TeamBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     owner_id: int | None = Field(default=None, foreign_key="user.id")
     owner: User | None = Relationship(back_populates="teams")
-    pokemon: list[Pokemon] = Relationship(back_populates="team")
+    pokemon: list[Pokemon] = Relationship(back_populates="team", cascade_delete=True)
 
 
 class TeamCreate(TeamBase):
