@@ -8,13 +8,7 @@ export const api = axios.create({
   },
 });
 
-// Types for API responses
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-}
-
+// Types for API responses models
 export interface Pokemon {
   id: number;
   name: string;
@@ -72,20 +66,6 @@ export const pokemonAPI = {
       };
     } catch (error) {
       throw new Error(`Pokemon "${name}" not found`);
-    }
-  },
-
-  getPokemonByName: async (name: string) => {
-    try {
-      const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
-      return {
-        id: response.data.id,
-        name: response.data.name,
-        image: response.data.sprites.front_default,
-        types: response.data.types.map((type: any) => type.type.name),
-      };
-    } catch (error) {
-      throw new Error(`Pokemon with name ${name} not found`);
     }
   },
 };

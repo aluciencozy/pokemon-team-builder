@@ -19,7 +19,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
@@ -31,7 +31,7 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,31 +40,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       setToken(storedToken);
-      // Set the token in axios headers
-      api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-      // Fetch user data
-      fetchUserData();
+
+      api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`; // Set the token in axios headers
+
+      fetchUserData(); // Fetch user data
     } else {
       setIsLoading(false);
     }
   }, []);
 
-  const fetchUserData = async () => {
+  const fetchUserData = async (): Promise<void> => {
     try {
       const response = await api.get('/auth/me');
       setUser(response.data);
     } catch (error) {
       console.error('Failed to fetch user data:', error);
-      // Token might be invalid, clear it
-      localStorage.removeItem('token');
+
+      localStorage.removeItem('token'); // Token might be invalid, clear it
       setToken(null);
-      delete api.defaults.headers.common['Authorization'];
+
+      delete api.defaults.headers.common['Authorization']; // Delete the token from axios headers
     } finally {
       setIsLoading(false);
     }
   };
 
-  const login = async (username: string, password: string) => {
+  const login = async (username: string, password: string): Promise<void> => {
     try {
       const formData = new FormData();
       formData.append('username', username);
@@ -80,18 +81,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setToken(access_token);
       localStorage.setItem('token', access_token);
 
-      // Set the token in axios headers
-      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`; // Set the token in axios headers
 
-      // Fetch user data
-      await fetchUserData();
+      await fetchUserData(); // Fetch user data
     } catch (error) {
       console.error('Login failed:', error);
       throw error;
     }
   };
 
-  const register = async (username: string, email: string, password: string) => {
+  const register = async (username: string, email: string, password: string): Promise<void> => {
     try {
       const response = await api.post('/auth/register', {
         username,
@@ -103,18 +102,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setToken(access_token);
       localStorage.setItem('token', access_token);
 
-      // Set the token in axios headers
-      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`; // Set the token in axios headers
 
-      // Fetch user data
-      await fetchUserData();
+      await fetchUserData(); // Fetch user data
     } catch (error) {
       console.error('Registration failed:', error);
       throw error;
     }
   };
 
-  const logout = () => {
+  const logout = (): void => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');

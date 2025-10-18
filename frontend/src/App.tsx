@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbar.tsx';
 import HomePage from './pages/HomePage.tsx';
-import LoginPage from './pages/LoginPage';
+import LoginPage from './pages/LoginPage.tsx';
 import RegisterPage from './pages/RegisterPage.tsx';
 import MyTeamsPage from './pages/MyTeamsPage.tsx';
 

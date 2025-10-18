@@ -33,11 +33,10 @@ const MyTeamsPage: React.FC = () => {
       // Fetch Pokemon images for each team
       const teamsWithImages = await Promise.all(
         fetchedTeams.map(async (team) => {
-          console.log(team);
           const pokemonWithImages = await Promise.all(
             team.pokemon.map(async (pokemon) => {
               try {
-                const pokemonData = await pokemonAPI.getPokemonByName(pokemon.name);
+                const pokemonData = await pokemonAPI.searchPokemon(pokemon.name);
                 return {
                   ...pokemon,
                   image: pokemonData.image,

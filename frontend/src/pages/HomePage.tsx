@@ -11,16 +11,17 @@ interface PokemonData {
 }
 
 const HomePage: React.FC = () => {
-  const { user } = useAuth();
-  const [searchTerm, setSearchTerm] = useState('');
+  const { user } = useAuth(); // Get the user from the context
+
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchResults, setSearchResults] = useState<PokemonData[]>([]);
   const [teamSlots, setTeamSlots] = useState<(PokemonData | null)[]>(Array(6).fill(null));
-  const [teamName, setTeamName] = useState('');
-  const [isSearching, setIsSearching] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [message, setMessage] = useState('');
+  const [teamName, setTeamName] = useState<string>('');
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
 
-  const searchPokemon = async () => {
+  const searchPokemon = async (): Promise<void> => {
     if (!searchTerm.trim()) return;
 
     setIsSearching(true);
@@ -36,7 +37,7 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const addPokemonToTeam = (pokemon: PokemonData) => {
+  const addPokemonToTeam = (pokemon: PokemonData): void => {
     const emptySlotIndex = teamSlots.findIndex((slot) => slot === null);
     if (emptySlotIndex !== -1) {
       const newTeamSlots = [...teamSlots];
@@ -50,13 +51,13 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const removePokemonFromTeam = (index: number) => {
+  const removePokemonFromTeam = (index: number): void => {
     const newTeamSlots = [...teamSlots];
     newTeamSlots[index] = null;
     setTeamSlots(newTeamSlots);
   };
 
-  const saveTeam = async () => {
+  const saveTeam = async (): Promise<void> => {
     if (!user) {
       setMessage('Please log in to save teams.');
       setTimeout(() => setMessage(''), 3000);
@@ -96,7 +97,7 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent): void => {
     if (e.key === 'Enter') {
       searchPokemon();
     }
