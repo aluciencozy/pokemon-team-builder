@@ -21,7 +21,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[TeamPublic])
+@router.get("/", response_model=list[TeamPublicWithPokemon])
 async def get_teams(
     current_user: Annotated[User, Depends(get_current_user)], session: SessionDep
 ):

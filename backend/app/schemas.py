@@ -36,26 +36,6 @@ class UserPublicWithTeams(UserPublic):
     teams: list["TeamPublic"] = []
 
 
-# --- POKEMON MODELS ---
-class PokemonBase(SQLModel):
-    name: str
-    # can add other info later, like moves, abilities, items, etc.
-
-
-class Pokemon(PokemonBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    team_id: int | None = Field(default=None, foreign_key="team.id")
-    team: "Team | None" = Relationship(back_populates="pokemon")
-
-
-class PokemonCreate(PokemonBase):
-    pass
-
-
-class PokemonPublic(PokemonBase):
-    id: int
-
-
 # --- TEAM MODELS ---
 class TeamBase(SQLModel):
     name: str = Field(index=True)
@@ -65,11 +45,11 @@ class Team(TeamBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     owner_id: int | None = Field(default=None, foreign_key="user.id")
     owner: User | None = Relationship(back_populates="teams")
-    pokemon: list[Pokemon] = Relationship(back_populates="team", cascade_delete=True)
+    pokemon: list["Pokemon"] = Relationship(back_populates="team", cascade_delete=True)
 
 
 class TeamCreate(TeamBase):
-    pokemon: list[PokemonCreate]
+    pokemon: list["PokemonCreate"]
 
 
 class TeamPublic(TeamBase):
@@ -78,4 +58,24 @@ class TeamPublic(TeamBase):
 
 
 class TeamPublicWithPokemon(TeamPublic):
-    pokemon: list[PokemonPublic]
+    pokemon: list["PokemonPublic"]
+
+
+# --- POKEMON MODELS ---
+class PokemonBase(SQLModel):
+    name: str
+    # can add other info later, like moves, abilities, items, etc.
+
+
+class Pokemon(PokemonBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    team_id: int | None = Field(default=None, foreign_key="team.id")
+    team: Team | None = Relationship(back_populates="pokemon")
+
+
+class PokemonCreate(PokemonBase):
+    pass
+
+
+class PokemonPublic(PokemonBase):
+    id: int
