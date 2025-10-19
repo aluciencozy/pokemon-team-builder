@@ -25,7 +25,7 @@ const MyTeamsPage: React.FC = () => {
     }
   }, [user]);
 
-  const fetchTeams = async () => {
+  const fetchTeams = async (): Promise<void> => {
     try {
       setIsLoading(true);
       const fetchedTeams = await teamsAPI.getTeams();
@@ -42,7 +42,6 @@ const MyTeamsPage: React.FC = () => {
                   image: pokemonData.image,
                 };
               } catch (error) {
-                // If Pokemon not found, return with placeholder
                 return {
                   ...pokemon,
                   image: 'https://via.placeholder.com/96x96?text=?',
@@ -67,7 +66,7 @@ const MyTeamsPage: React.FC = () => {
     }
   };
 
-  const deleteTeam = async (teamId: number) => {
+  const deleteTeam = async (teamId: number): Promise<void> => {
     if (!window.confirm('Are you sure you want to delete this team?')) {
       return;
     }
