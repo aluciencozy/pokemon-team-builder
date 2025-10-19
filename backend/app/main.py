@@ -23,15 +23,15 @@ app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-app.include_router(auth.router)
-app.include_router(teams.router)
+app.include_router(auth.router, prefix="/api/v1")
+app.include_router(teams.router, prefix="/api/v1")
 
 
 @app.get("/")
