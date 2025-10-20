@@ -5,10 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routers import teams, auth
 from app.database import create_db_and_tables
 
-origins = [
-    "http://localhost:5173",
-    # "https://pokemon-team-builder.vercel.app", tweak this later
-]
+origins = ["http://localhost:5173", "https://pokemon-team-builder-black.vercel.app"]
 
 
 @asynccontextmanager
