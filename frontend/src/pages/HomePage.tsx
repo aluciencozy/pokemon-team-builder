@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { pokemonAPI, teamsAPI } from '../services/api';
@@ -21,6 +22,46 @@ const HomePage: React.FC = () => {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
+
+  const { teamId } = useParams();
+
+  useEffect(() => {
+    if (teamId) fetchTeam(Number(teamId));
+  }, []);
+
+  const fetchTeam = async (teamId: number): Promise<void> => {
+    try {
+      const team = await teamsAPI.getTeam(teamId);
+      const pokemonWithImagesAndTypes = await Promise.all(
+        team.pokemon.map(async (pokemon) => {
+          try {
+            const pokemonData = await pokemonAPI.searchPokemon(pokemon.name);
+            return {
+              ...pokemon,
+              image: pokemonData.image,
+              types: pokemonData.types,
+            };
+          } catch (e) {
+            return {
+              ...pokemon,
+              image: 'https://via.placeholder.com/96x96?text=?',
+              types: [],
+            };
+          }
+        })
+      );
+
+      const newTeamSlots = Array(6).fill(null);
+      pokemonWithImagesAndTypes.forEach((pokemon, index) => {
+        newTeamSlots[index] = pokemon;
+      });
+
+      setTeamSlots(newTeamSlots);
+      setTeamName(team.name);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const searchPokemon = async (): Promise<void> => {
     if (!searchTerm.trim()) return;
@@ -86,6 +127,48 @@ const HomePage: React.FC = () => {
       };
 
       await teamsAPI.createTeam(teamData);
+      setMessage('Team saved successfully!');
+      setTeamName('');
+      setTeamSlots(Array(6).fill(null));
+      setTimeout(() => setMessage(''), 3000);
+    } catch (error) {
+      setMessage('Failed to save team. Please try again.');
+      setTimeout(() => setMessage(''), 3000);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const updateTeam = async (): Promise<void> => {
+    if (!teamId) return;
+
+    if (!user) {
+      setMessage('Please log in to save teams.');
+      setTimeout(() => setMessage(''), 3000);
+      return;
+    }
+
+    if (!teamName.trim()) {
+      setMessage('Please enter a team name.');
+      setTimeout(() => setMessage(''), 3000);
+      return;
+    }
+
+    const pokemonInTeam = teamSlots.filter((slot) => slot !== null);
+    if (pokemonInTeam.length === 0) {
+      setMessage('Please add at least one Pokemon to your team.');
+      setTimeout(() => setMessage(''), 3000);
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const teamData: TeamCreate = {
+        name: teamName.trim(),
+        pokemon: pokemonInTeam.map((pokemon) => ({ name: pokemon.name })),
+      };
+
+      await teamsAPI.updateTeam(Number(teamId), teamData);
       setMessage('Team saved successfully!');
       setTeamName('');
       setTeamSlots(Array(6).fill(null));
@@ -383,7 +466,7 @@ const HomePage: React.FC = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={saveTeam}
+                onClick={teamId ? updateTeam : saveTeam}
                 disabled={isSaving}
                 className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white px-8 sm:px-12 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               >

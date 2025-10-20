@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { teamsAPI, pokemonAPI } from '../services/api';
@@ -16,6 +17,8 @@ interface TeamWithImages extends Team {
 
 const MyTeamsPage: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
   const [teams, setTeams] = useState<TeamWithImages[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -77,6 +80,10 @@ const MyTeamsPage: React.FC = () => {
     } catch (error) {
       setError('Failed to delete team. Please try again.');
     }
+  };
+
+  const handleEdit = async (teamId: number): Promise<void> => {
+    navigate(`/${teamId}`);
   };
 
   const containerVariants = {
@@ -233,14 +240,24 @@ const MyTeamsPage: React.FC = () => {
                         >
                           {team.name}
                         </motion.h3>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => deleteTeam(team.id)}
-                          className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors p-2 hover:bg-red-900/20 rounded-lg"
-                        >
-                          Delete
-                        </motion.button>
+                        <div className="space-x-1">
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => handleEdit(team.id)}
+                            className="text-primary-400 hover:text-primary-300 hover:bg-primary-900/20 text-sm font-medium transition-colors p-2 rounded-lg cursor-pointer"
+                          >
+                            Edit
+                          </motion.button>
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => deleteTeam(team.id)}
+                            className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors p-2 hover:bg-red-900/20 rounded-lg cursor-pointer"
+                          >
+                            Delete
+                          </motion.button>
+                        </div>
                       </div>
 
                       <div className="grid grid-cols-3 gap-3 mb-6">

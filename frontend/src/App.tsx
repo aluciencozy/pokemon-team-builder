@@ -17,7 +17,7 @@ const AppContent = () => {
       <main>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/:teamId?" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/my-teams" element={<MyTeamsPage />} />

@@ -51,7 +51,7 @@ const LoginPage: React.FC = () => {
         className="max-w-md w-full space-y-8"
       >
         <motion.div variants={itemVariants}>
-          <h2 className="mt-6 text-center text-4xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent">
+          <h2 className="mt-6 pb-1 text-center text-4xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent">
             Sign in to your account
           </h2>
           <p className="mt-4 text-center text-gray-600 dark:text-gray-300">
