@@ -31,7 +31,6 @@ const MyTeamsPage: React.FC = () => {
       setIsLoading(true);
       const fetchedTeams = await teamsAPI.getTeams();
 
-      // Fetch Pokemon images for each team
       const teamsWithImages = await Promise.all(
         fetchedTeams.map(async (team) => {
           const pokemonWithImages = await Promise.all(
@@ -153,7 +152,6 @@ const MyTeamsPage: React.FC = () => {
           animate="visible"
           className="space-y-8"
         >
-          {/* Header */}
           <motion.div variants={itemVariants} className="text-center mb-12">
             <h1 className="text-5xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent mb-4">
               My Teams
@@ -163,7 +161,6 @@ const MyTeamsPage: React.FC = () => {
             </p>
           </motion.div>
 
-          {/* Error Message */}
           <AnimatePresence>
             {error && (
               <motion.div
@@ -177,7 +174,6 @@ const MyTeamsPage: React.FC = () => {
             )}
           </AnimatePresence>
 
-          {/* Teams Grid */}
           <AnimatePresence>
             {teams.length === 0 ? (
               <motion.div

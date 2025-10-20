@@ -1,2 +1,6 @@
 @import 'tailwindcss';
 @config '../tailwind.config.ts';
+
+@theme {
+  --breakpoint-xs: 30rem;
+}

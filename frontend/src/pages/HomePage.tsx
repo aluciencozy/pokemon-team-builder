@@ -127,7 +127,7 @@ const HomePage: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -138,7 +138,7 @@ const HomePage: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-5xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent mb-6"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent mb-4 sm:mb-6"
           >
             Build Your Team
           </motion.h1>
@@ -146,7 +146,7 @@ const HomePage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="text-xl text-gray-600 dark:text-gray-300 mb-8"
+            className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8"
           >
             Please log in or create an account to start building your Pokémon team.
           </motion.p>
@@ -154,13 +154,13 @@ const HomePage: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="space-x-4"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center"
           >
             <motion.a
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               href="/login"
-              className="bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-4 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
             >
               Login
             </motion.a>
@@ -168,7 +168,7 @@ const HomePage: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               href="/register"
-              className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white px-8 py-4 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl text-sm sm:text-base"
             >
               Sign Up
             </motion.a>
@@ -179,32 +179,30 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-4 sm:py-6 lg:py-8">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6 xl:px-8">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="space-y-8"
+          className="space-y-6 sm:space-y-8"
         >
-          {/* Header */}
-          <motion.div variants={itemVariants} className="text-center mb-12">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent mb-4">
+          <motion.div variants={itemVariants} className="text-center mb-8 sm:mb-10 lg:mb-12">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent mb-2 sm:mb-3 lg:mb-4">
               Build Your Team
             </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-300">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300">
               Create the ultimate Pokémon team
             </p>
           </motion.div>
 
-          {/* Message */}
           <AnimatePresence>
             {message && (
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="mb-6 p-4 bg-primary-100 dark:bg-primary-900 border border-primary-400 dark:border-primary-600 text-primary-700 dark:text-primary-300 rounded-xl text-center shadow-lg"
+                className="mb-4 sm:mb-6 p-3 sm:p-4 bg-primary-100 dark:bg-primary-900 border border-primary-400 dark:border-primary-600 text-primary-700 dark:text-primary-300 rounded-xl text-center shadow-lg text-sm sm:text-base"
               >
                 {message}
               </motion.div>
@@ -214,17 +212,17 @@ const HomePage: React.FC = () => {
           {/* Search Section */}
           <motion.div
             variants={itemVariants}
-            className="bg-white/80 dark:bg-dark-800/50 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-200 dark:border-dark-700"
+            className="bg-white/80 dark:bg-dark-800/50 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 border border-gray-200 dark:border-dark-700 relative z-10"
           >
-            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6">
               Search Pokémon
             </h2>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <motion.input
                 whileFocus={{ scale: 1.02 }}
                 type="text"
                 placeholder="Enter Pokémon name..."
-                className="flex-1 px-6 py-4 bg-white/80 dark:bg-dark-700/50 border border-gray-300 dark:border-dark-600 rounded-xl text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent backdrop-blur-sm transition-all duration-200"
+                className="flex-1 px-4 sm:px-6 py-3 sm:py-4 bg-white/80 dark:bg-dark-700/50 border border-gray-300 dark:border-dark-600 rounded-lg sm:rounded-xl text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={handleKeyPress}
@@ -234,7 +232,7 @@ const HomePage: React.FC = () => {
                 whileTap={{ scale: 0.95 }}
                 onClick={searchPokemon}
                 disabled={isSearching}
-                className="bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-4 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               >
                 {isSearching ? (
                   <div className="flex items-center">
@@ -247,19 +245,18 @@ const HomePage: React.FC = () => {
               </motion.button>
             </div>
 
-            {/* Search Results */}
             <AnimatePresence>
               {searchResults.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mt-6"
+                  className="mt-4 sm:mt-6"
                 >
-                  <h3 className="text-lg font-medium text-gray-800 dark:text-white mb-4">
+                  <h3 className="text-base sm:text-lg font-medium text-gray-800 dark:text-white mb-3 sm:mb-4">
                     Search Results
                   </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                     {searchResults.map((pokemon, index) => (
                       <motion.div
                         key={pokemon.id}
@@ -267,7 +264,7 @@ const HomePage: React.FC = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: index * 0.1 }}
                         whileHover={{ scale: 1.05, y: -5 }}
-                        className="bg-white/80 dark:bg-dark-700/50 backdrop-blur-md rounded-xl p-6 border border-gray-200 dark:border-dark-600 hover:border-primary-400 dark:hover:border-primary-500 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-xl"
+                        className="bg-white/80 dark:bg-dark-700/50 backdrop-blur-md rounded-lg sm:rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-dark-600 hover:border-primary-400 dark:hover:border-primary-500 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-xl"
                         onClick={() => addPokemonToTeam(pokemon)}
                       >
                         <div className="text-center">
@@ -275,16 +272,16 @@ const HomePage: React.FC = () => {
                             whileHover={{ rotate: 5 }}
                             src={pokemon.image}
                             alt={pokemon.name}
-                            className="w-24 h-24 mx-auto mb-3"
+                            className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-2 sm:mb-3"
                           />
-                          <h4 className="font-medium text-gray-800 dark:text-white capitalize mb-2">
+                          <h4 className="font-medium text-gray-800 dark:text-white capitalize mb-2 text-sm sm:text-base">
                             {pokemon.name}
                           </h4>
-                          <div className="flex justify-center gap-2">
+                          <div className="flex justify-center gap-1 sm:gap-2">
                             {pokemon.types.map((type) => (
                               <span
                                 key={type}
-                                className="px-3 py-1 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-xs rounded-full capitalize font-medium"
+                                className="px-2 sm:px-3 py-1 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-xs rounded-full capitalize font-medium"
                               >
                                 {type}
                               </span>
@@ -302,15 +299,16 @@ const HomePage: React.FC = () => {
           {/* Team Builder Section */}
           <motion.div
             variants={itemVariants}
-            className="bg-white/80 dark:bg-dark-800/50 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-200 dark:border-dark-700"
+            className="bg-white/80 dark:bg-dark-800/50 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8 border border-gray-200 dark:border-dark-700"
           >
-            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Your Team</h2>
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-800 dark:text-white mb-4 sm:mb-6">
+              Your Team
+            </h2>
 
-            {/* Team Name Input */}
-            <div className="mb-8">
+            <div className="mb-6 sm:mb-8">
               <label
                 htmlFor="teamName"
-                className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-3"
+                className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2 sm:mb-3"
               >
                 Team Name
               </label>
@@ -319,14 +317,13 @@ const HomePage: React.FC = () => {
                 id="teamName"
                 type="text"
                 placeholder="Enter team name..."
-                className="w-full px-6 py-4 bg-white/80 dark:bg-dark-700/50 border border-gray-300 dark:border-dark-600 rounded-xl text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent backdrop-blur-sm transition-all duration-200"
+                className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white/80 dark:bg-dark-700/50 border border-gray-300 dark:border-dark-600 rounded-lg sm:rounded-xl text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
               />
             </div>
 
-            {/* Team Slots */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-6 sm:mb-8">
               {teamSlots.map((pokemon, index) => (
                 <motion.div
                   key={index}
@@ -334,7 +331,7 @@ const HomePage: React.FC = () => {
                   initial="empty"
                   whileHover="hover"
                   animate="filled"
-                  className="bg-white/60 dark:bg-dark-700/30 backdrop-blur-md rounded-xl p-4 border-2 border-dashed border-gray-300 dark:border-dark-600 min-h-[140px] flex flex-col items-center justify-center hover:border-primary-400 dark:hover:border-primary-500 transition-all duration-200"
+                  className="bg-white/60 dark:bg-dark-700/30 backdrop-blur-md rounded-lg sm:rounded-xl p-3 sm:p-4 border-2 border-dashed border-gray-300 dark:border-dark-600 min-h-[120px] sm:min-h-[140px] flex flex-col items-center justify-center hover:border-primary-400 dark:hover:border-primary-500 transition-all duration-200"
                 >
                   <AnimatePresence mode="wait">
                     {pokemon ? (
@@ -349,9 +346,9 @@ const HomePage: React.FC = () => {
                           whileHover={{ rotate: 5 }}
                           src={pokemon.image}
                           alt={pokemon.name}
-                          className="w-16 h-16 mx-auto mb-2"
+                          className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2"
                         />
-                        <p className="text-sm font-medium text-gray-800 dark:text-white capitalize mb-2">
+                        <p className="text-xs sm:text-sm font-medium text-gray-800 dark:text-white capitalize mb-2">
                           {pokemon.name}
                         </p>
                         <motion.button
@@ -371,10 +368,10 @@ const HomePage: React.FC = () => {
                         exit={{ opacity: 0 }}
                         className="text-center text-gray-500 dark:text-gray-400"
                       >
-                        <div className="w-16 h-16 mx-auto mb-2 bg-white/10 dark:bg-dark-600/50 rounded-full flex items-center justify-center">
-                          <span className="text-2xl">+</span>
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 bg-white/10 dark:bg-dark-600/50 rounded-full flex items-center justify-center">
+                          <span className="text-lg sm:text-2xl">+</span>
                         </div>
-                        <p className="text-sm">Empty Slot</p>
+                        <p className="text-xs sm:text-sm">Empty Slot</p>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -382,14 +379,13 @@ const HomePage: React.FC = () => {
               ))}
             </div>
 
-            {/* Save Team Button */}
             <div className="text-center">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={saveTeam}
                 disabled={isSaving}
-                className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white px-12 py-4 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white px-8 sm:px-12 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
               >
                 {isSaving ? (
                   <div className="flex items-center">

@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Create axios instance with base configuration
 export const api = axios.create({
   baseURL: 'http://localhost:8000/api/v1',
   headers: {
@@ -8,7 +7,6 @@ export const api = axios.create({
   },
 });
 
-// Types for API responses models
 export interface Pokemon {
   id: number;
   name: string;
@@ -26,7 +24,6 @@ export interface TeamCreate {
   pokemon: { name: string }[];
 }
 
-// Teams API functions
 export const teamsAPI = {
   getTeams: async (): Promise<Team[]> => {
     const response = await api.get('/teams/');
@@ -53,7 +50,6 @@ export const teamsAPI = {
   },
 };
 
-// Pokemon API functions (using external PokeAPI)
 export const pokemonAPI = {
   searchPokemon: async (name: string) => {
     try {

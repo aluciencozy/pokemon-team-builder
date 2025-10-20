@@ -41,9 +41,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProv
     if (storedToken) {
       setToken(storedToken);
 
-      api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`; // Set the token in axios headers
+      api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
 
-      fetchUserData(); // Fetch user data
+      fetchUserData();
     } else {
       setIsLoading(false);
     }
@@ -56,10 +56,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProv
     } catch (error) {
       console.error('Failed to fetch user data:', error);
 
-      localStorage.removeItem('token'); // Token might be invalid, clear it
+      localStorage.removeItem('token');
       setToken(null);
 
-      delete api.defaults.headers.common['Authorization']; // Delete the token from axios headers
+      delete api.defaults.headers.common['Authorization'];
     } finally {
       setIsLoading(false);
     }
@@ -81,9 +81,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProv
       setToken(access_token);
       localStorage.setItem('token', access_token);
 
-      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`; // Set the token in axios headers
+      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
-      await fetchUserData(); // Fetch user data
+      await fetchUserData();
     } catch (error) {
       console.error('Login failed:', error);
       throw error;
@@ -102,9 +102,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProv
       setToken(access_token);
       localStorage.setItem('token', access_token);
 
-      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`; // Set the token in axios headers
+      api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
-      await fetchUserData(); // Fetch user data
+      await fetchUserData();
     } catch (error) {
       console.error('Registration failed:', error);
       throw error;
