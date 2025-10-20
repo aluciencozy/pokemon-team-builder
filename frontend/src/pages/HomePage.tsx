@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { pokemonAPI, teamsAPI } from '../services/api';
 import type { TeamCreate } from '../services/api';
@@ -11,7 +12,7 @@ interface PokemonData {
 }
 
 const HomePage: React.FC = () => {
-  const { user } = useAuth(); // Get the user from the context
+  const { user } = useAuth();
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchResults, setSearchResults] = useState<PokemonData[]>([]);
@@ -103,168 +104,305 @@ const HomePage: React.FC = () => {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const slotVariants = {
+    empty: { scale: 1 },
+    hover: { scale: 1.05 },
+    filled: { scale: 1 },
+  };
+
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Build Your Team</h1>
-          <p className="text-lg text-gray-600 mb-8">
+      <div className="min-h-screen flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
+        >
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-5xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent mb-6"
+          >
+            Build Your Team
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="text-xl text-gray-600 dark:text-gray-300 mb-8"
+          >
             Please log in or create an account to start building your Pokémon team.
-          </p>
-          <div className="space-x-4">
-            <a
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="space-x-4"
+          >
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               href="/login"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition-colors"
+              className="bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-4 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               Login
-            </a>
-            <a
+            </motion.a>
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               href="/register"
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md font-medium transition-colors"
+              className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white px-8 py-4 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               Sign Up
-            </a>
-          </div>
-        </div>
+            </motion.a>
+          </motion.div>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Build Your Team</h1>
-          <p className="text-lg text-gray-600">Create the ultimate Pokémon team</p>
-        </div>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="space-y-8"
+        >
+          {/* Header */}
+          <motion.div variants={itemVariants} className="text-center mb-12">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent mb-4">
+              Build Your Team
+            </h1>
+            <p className="text-xl text-gray-600 dark:text-gray-300">
+              Create the ultimate Pokémon team
+            </p>
+          </motion.div>
 
-        {message && (
-          <div className="mb-6 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-md text-center">
-            {message}
-          </div>
-        )}
-
-        {/* Search Section */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Search Pokémon</h2>
-          <div className="flex gap-4">
-            <input
-              type="text"
-              placeholder="Enter Pokémon name..."
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={handleKeyPress}
-            />
-            <button
-              onClick={searchPokemon}
-              disabled={isSearching}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSearching ? 'Searching...' : 'Search'}
-            </button>
-          </div>
-
-          {/* Search Results */}
-          {searchResults.length > 0 && (
-            <div className="mt-4">
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Search Results</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {searchResults.map((pokemon) => (
-                  <div
-                    key={pokemon.id}
-                    className="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-blue-300 transition-colors cursor-pointer"
-                    onClick={() => addPokemonToTeam(pokemon)}
-                  >
-                    <div className="text-center">
-                      <img
-                        src={pokemon.image}
-                        alt={pokemon.name}
-                        className="w-24 h-24 mx-auto mb-2"
-                      />
-                      <h4 className="font-medium text-gray-900 capitalize">{pokemon.name}</h4>
-                      <div className="flex justify-center gap-1 mt-1">
-                        {pokemon.types.map((type) => (
-                          <span
-                            key={type}
-                            className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full capitalize"
-                          >
-                            {type}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Team Builder Section */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Your Team</h2>
-
-          {/* Team Name Input */}
-          <div className="mb-6">
-            <label htmlFor="teamName" className="block text-sm font-medium text-gray-700 mb-2">
-              Team Name
-            </label>
-            <input
-              id="teamName"
-              type="text"
-              placeholder="Enter team name..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              value={teamName}
-              onChange={(e) => setTeamName(e.target.value)}
-            />
-          </div>
-
-          {/* Team Slots */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-            {teamSlots.map((pokemon, index) => (
-              <div
-                key={index}
-                className="bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-300 min-h-[120px] flex flex-col items-center justify-center"
+          {/* Message */}
+          <AnimatePresence>
+            {message && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="mb-6 p-4 bg-primary-100 dark:bg-primary-900 border border-primary-400 dark:border-primary-600 text-primary-700 dark:text-primary-300 rounded-xl text-center shadow-lg"
               >
-                {pokemon ? (
-                  <div className="text-center">
-                    <img
-                      src={pokemon.image}
-                      alt={pokemon.name}
-                      className="w-16 h-16 mx-auto mb-2"
-                    />
-                    <p className="text-sm font-medium text-gray-900 capitalize">{pokemon.name}</p>
-                    <button
-                      onClick={() => removePokemonFromTeam(index)}
-                      className="mt-2 text-xs text-red-600 hover:text-red-800 transition-colors"
-                    >
-                      Remove
-                    </button>
+                {message}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Search Section */}
+          <motion.div
+            variants={itemVariants}
+            className="bg-white/80 dark:bg-dark-800/50 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-200 dark:border-dark-700"
+          >
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
+              Search Pokémon
+            </h2>
+            <div className="flex gap-4">
+              <motion.input
+                whileFocus={{ scale: 1.02 }}
+                type="text"
+                placeholder="Enter Pokémon name..."
+                className="flex-1 px-6 py-4 bg-white/80 dark:bg-dark-700/50 border border-gray-300 dark:border-dark-600 rounded-xl text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent backdrop-blur-sm transition-all duration-200"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={handleKeyPress}
+              />
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={searchPokemon}
+                disabled={isSearching}
+                className="bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-4 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSearching ? (
+                  <div className="flex items-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Searching...
                   </div>
                 ) : (
-                  <div className="text-center text-gray-400">
-                    <div className="w-16 h-16 mx-auto mb-2 bg-gray-200 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">+</span>
-                    </div>
-                    <p className="text-sm">Empty Slot</p>
-                  </div>
+                  'Search'
                 )}
-              </div>
-            ))}
-          </div>
+              </motion.button>
+            </div>
 
-          {/* Save Team Button */}
-          <div className="text-center">
-            <button
-              onClick={saveTeam}
-              disabled={isSaving}
-              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSaving ? 'Saving...' : 'Save Team'}
-            </button>
-          </div>
-        </div>
+            {/* Search Results */}
+            <AnimatePresence>
+              {searchResults.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mt-6"
+                >
+                  <h3 className="text-lg font-medium text-gray-800 dark:text-white mb-4">
+                    Search Results
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {searchResults.map((pokemon, index) => (
+                      <motion.div
+                        key={pokemon.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.1 }}
+                        whileHover={{ scale: 1.05, y: -5 }}
+                        className="bg-white/80 dark:bg-dark-700/50 backdrop-blur-md rounded-xl p-6 border border-gray-200 dark:border-dark-600 hover:border-primary-400 dark:hover:border-primary-500 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-xl"
+                        onClick={() => addPokemonToTeam(pokemon)}
+                      >
+                        <div className="text-center">
+                          <motion.img
+                            whileHover={{ rotate: 5 }}
+                            src={pokemon.image}
+                            alt={pokemon.name}
+                            className="w-24 h-24 mx-auto mb-3"
+                          />
+                          <h4 className="font-medium text-gray-800 dark:text-white capitalize mb-2">
+                            {pokemon.name}
+                          </h4>
+                          <div className="flex justify-center gap-2">
+                            {pokemon.types.map((type) => (
+                              <span
+                                key={type}
+                                className="px-3 py-1 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-xs rounded-full capitalize font-medium"
+                              >
+                                {type}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Team Builder Section */}
+          <motion.div
+            variants={itemVariants}
+            className="bg-white/80 dark:bg-dark-800/50 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-200 dark:border-dark-700"
+          >
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Your Team</h2>
+
+            {/* Team Name Input */}
+            <div className="mb-8">
+              <label
+                htmlFor="teamName"
+                className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-3"
+              >
+                Team Name
+              </label>
+              <motion.input
+                whileFocus={{ scale: 1.02 }}
+                id="teamName"
+                type="text"
+                placeholder="Enter team name..."
+                className="w-full px-6 py-4 bg-white/80 dark:bg-dark-700/50 border border-gray-300 dark:border-dark-600 rounded-xl text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent backdrop-blur-sm transition-all duration-200"
+                value={teamName}
+                onChange={(e) => setTeamName(e.target.value)}
+              />
+            </div>
+
+            {/* Team Slots */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+              {teamSlots.map((pokemon, index) => (
+                <motion.div
+                  key={index}
+                  variants={slotVariants}
+                  initial="empty"
+                  whileHover="hover"
+                  animate="filled"
+                  className="bg-white/60 dark:bg-dark-700/30 backdrop-blur-md rounded-xl p-4 border-2 border-dashed border-gray-300 dark:border-dark-600 min-h-[140px] flex flex-col items-center justify-center hover:border-primary-400 dark:hover:border-primary-500 transition-all duration-200"
+                >
+                  <AnimatePresence mode="wait">
+                    {pokemon ? (
+                      <motion.div
+                        key="filled"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        className="text-center"
+                      >
+                        <motion.img
+                          whileHover={{ rotate: 5 }}
+                          src={pokemon.image}
+                          alt={pokemon.name}
+                          className="w-16 h-16 mx-auto mb-2"
+                        />
+                        <p className="text-sm font-medium text-gray-800 dark:text-white capitalize mb-2">
+                          {pokemon.name}
+                        </p>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => removePokemonFromTeam(index)}
+                          className="text-xs text-red-400 hover:text-red-300 transition-colors"
+                        >
+                          Remove
+                        </motion.button>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="empty"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="text-center text-gray-500 dark:text-gray-400"
+                      >
+                        <div className="w-16 h-16 mx-auto mb-2 bg-white/10 dark:bg-dark-600/50 rounded-full flex items-center justify-center">
+                          <span className="text-2xl">+</span>
+                        </div>
+                        <p className="text-sm">Empty Slot</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Save Team Button */}
+            <div className="text-center">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={saveTeam}
+                disabled={isSaving}
+                className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white px-12 py-4 rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSaving ? (
+                  <div className="flex items-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Saving...
+                  </div>
+                ) : (
+                  'Save Team'
+                )}
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );
